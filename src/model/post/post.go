@@ -10,6 +10,6 @@ type Post struct {
 	Date                  int64  `json:"date"`
 	MarkedAsInappropriate bool   `json:"marked_as_inappropriate"`
 	UserID                uint
-	MediaID				  uint
+	MediaID               uint
 	TaggedUsers           []user.User
 }

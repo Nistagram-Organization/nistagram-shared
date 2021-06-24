@@ -7,14 +7,14 @@ import (
 
 type User struct {
 	ID             uint          `json:"id"`
-	Username       string        `json:"name"`
-	Password       string        `json:"description"`
-	Name           float32       `json:"price"`
-	Surname        uint          `json:"on_stock"`
-	Phone          string        `json:"image"`
+	Username       string        `json:"username"`
+	Password       string        `json:"password"`
+	Name           string        `json:"name"`
+	Surname        string        `json:"surname"`
+	Phone          string        `json:"phone"`
 	BirthDate      int64         `json:"birth_date"`
-	Website        float32       `json:"website"`
-	Biography      uint          `json:"biography"`
+	Website        string        `json:"website"`
+	Biography      string        `json:"biography"`
 	Gender         gender.Gender `json:"gender"`
 	Public         bool          `json:"public"`
 	Taggable       bool          `json:"taggable"`
