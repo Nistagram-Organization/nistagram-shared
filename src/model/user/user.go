@@ -22,9 +22,9 @@ type User struct {
 	Email          string        `json:"email"`
 	Favorites      []post.Post
 	Posts          []post.Post
-	Muted          []User        `gorm:"many2many:user_muted"`
-	Blocked        []User        `gorm:"many2many:user_blocked"`
-	Following      []User        `gorm:"many2many:user_following"`
-	FollowedBy     []User        `gorm:"many2many:user_following"`
-	FollowRequests []User        `gorm:"many2many:user_followRequests"`
+	Muted          []User        `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
+	Blocked        []User        `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
+	Following      []User        `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
+	FollowedBy     []User        `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
+	FollowRequests []User        `gorm:"many2many:user_followRequests;joinForeignKey:UserID;JoinReferences:FollowRequestsUser"`
 }
