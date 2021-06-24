@@ -11,4 +11,5 @@ type Campaign struct {
 	EndAge      uint                    `json:"end_age"`
 	Gender      gender.Gender           `json:"gender"`
 	Commercials []commercial.Commercial `gorm:"foreignKey:ID"`
+	AgentID     uint
 }

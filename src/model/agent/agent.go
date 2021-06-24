@@ -6,8 +6,8 @@ import (
 )
 
 type Agent struct {
-	ID        uint `json:"id"`
-	Approved  bool `json:"approved"`
+	ID        uint                `json:"id"`
+	Approved  bool                `json:"approved"`
 	Campaigns []campaign.Campaign
 	user.User
 }
