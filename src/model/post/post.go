@@ -1,9 +1,5 @@
 package post
 
-import (
-	"github.com/Nistagram-Organization/nistagram-shared/src/model/user"
-)
-
 type Post struct {
 	ID                    uint   `json:"id"`
 	Description           string `json:"description"`
@@ -11,5 +7,4 @@ type Post struct {
 	MarkedAsInappropriate bool   `json:"marked_as_inappropriate"`
 	UserID                uint
 	MediaID               uint
-	TaggedUsers           []user.User
 }
