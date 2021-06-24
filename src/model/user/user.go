@@ -22,9 +22,9 @@ type User struct {
 	Email          string        `json:"email"`
 	Favorites      []post.Post
 	Posts          []post.Post
-	Muted          []User
-	Blocked        []User
-	Followed       []User
-	FollowedBy     []User
-	FollowRequests []User
+	Muted          []User         `gorm:"foreignKey:ID"`
+	Blocked        []User         `gorm:"foreignKey:ID"`
+	Followed       []User         `gorm:"foreignKey:ID"`
+	FollowedBy     []User         `gorm:"foreignKey:ID"`
+	FollowRequests []User         `gorm:"foreignKey:ID"`
 }
