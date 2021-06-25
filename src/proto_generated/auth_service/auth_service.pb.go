@@ -9,7 +9,7 @@ package auth_service
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	user_message "github.com/Nistagram-Organization/nistagram-shared/src/proto_generated/user_message"
+	user_message "proto_generated/user_message"
 	reflect "reflect"
 	sync "sync"
 )
