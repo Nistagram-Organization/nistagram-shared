@@ -29,4 +29,5 @@ message UserMessage {
   bool active = 11;
   string email = 12;
   Role role = 13;
+  string phone = 14;
 }
