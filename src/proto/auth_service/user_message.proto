@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package auth_service;
+
+option go_package = "proto_generated/user_message";
+
+enum Role {
+  UNKNOWN = 0;
+  USER = 1;
+  AGENT = 2;
+}
+
+message UserMessage {
+  string username = 1;
+  string password = 2;
+  string name = 3;
+  string surname = 4;
+  int64 birth_date = 5;
+  string website = 6;
+  string biography = 7;
+  Gender gender = 8;
+  enum Gender {
+    UNKNOWN = 0;
+    MALE = 1;
+    FEMALE = 2;
+  }
+  bool public = 9;
+  bool taggable = 10;
+  bool active = 11;
+  string email = 12;
+  Role role = 13;
+}
