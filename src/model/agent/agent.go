@@ -6,7 +6,6 @@ import (
 )
 
 type Agent struct {
-	ID        uint                `json:"id"`
 	Campaigns []campaign.Campaign
 	user.User
 }
