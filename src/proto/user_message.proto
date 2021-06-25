@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package auth_service;
+package proto;
 
-option go_package = "proto_generated/user_message";
+option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
 
 enum Role {
   UNKNOWN = 0;
