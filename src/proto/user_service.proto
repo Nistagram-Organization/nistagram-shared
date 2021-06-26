@@ -15,7 +15,7 @@ message RegistrationResponse {
 }
 
 message DeleteUserRequest {
-  string email = 1;
+  uint64 id = 1;
 }
 
 message DeleteUserResponse {
