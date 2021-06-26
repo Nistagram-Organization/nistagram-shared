@@ -4,16 +4,15 @@ package proto;
 
 option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
 
-import "user_message.proto";
-
-message RegistrationRequest {
-  UserMessage registration = 1;
+message BlockUserRequest {
+  string email = 1;
 }
 
-message RegistrationResponse {
+message BlockUserResponse {
   bool success = 1;
 }
 
 service AuthService {
-  rpc Register(RegistrationRequest) returns (RegistrationResponse);
+  rpc BlockUser(BlockUserRequest) returns (BlockUserResponse);
 }
+

@@ -18,8 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	BlockUser(ctx context.Context, in *BlockUserRequest, opts ...grpc.CallOption) (*SuccessResponse, error)
-	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*SuccessResponse, error)
+	CreateUser(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
+	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
 }
 
 type userServiceClient struct {
@@ -30,17 +30,17 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) BlockUser(ctx context.Context, in *BlockUserRequest, opts ...grpc.CallOption) (*SuccessResponse, error) {
-	out := new(SuccessResponse)
-	err := c.cc.Invoke(ctx, "/proto.UserService/BlockUser", in, out, opts...)
+func (c *userServiceClient) CreateUser(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error) {
+	out := new(RegistrationResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/CreateUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*SuccessResponse, error) {
-	out := new(SuccessResponse)
+func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error) {
+	out := new(DeleteUserResponse)
 	err := c.cc.Invoke(ctx, "/proto.UserService/DeleteUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -52,8 +52,8 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserReques
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	BlockUser(context.Context, *BlockUserRequest) (*SuccessResponse, error)
-	DeleteUser(context.Context, *DeleteUserRequest) (*SuccessResponse, error)
+	CreateUser(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
+	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -61,10 +61,10 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) BlockUser(context.Context, *BlockUserRequest) (*SuccessResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BlockUser not implemented")
+func (UnimplementedUserServiceServer) CreateUser(context.Context, *RegistrationRequest) (*RegistrationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedUserServiceServer) DeleteUser(context.Context, *DeleteUserRequest) (*SuccessResponse, error) {
+func (UnimplementedUserServiceServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
@@ -80,20 +80,20 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_BlockUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BlockUserRequest)
+func _UserService_CreateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegistrationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).BlockUser(ctx, in)
+		return srv.(UserServiceServer).CreateUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.UserService/BlockUser",
+		FullMethod: "/proto.UserService/CreateUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).BlockUser(ctx, req.(*BlockUserRequest))
+		return srv.(UserServiceServer).CreateUser(ctx, req.(*RegistrationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -124,8 +124,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "BlockUser",
-			Handler:    _UserService_BlockUser_Handler,
+			MethodName: "CreateUser",
+			Handler:    _UserService_CreateUser_Handler,
 		},
 		{
 			MethodName: "DeleteUser",
