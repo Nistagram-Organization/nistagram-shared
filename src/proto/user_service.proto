@@ -16,6 +16,7 @@ message RegistrationResponse {
 
 message DeleteUserRequest {
   uint64 id = 1;
+  Role role =2;
 }
 
 message DeleteUserResponse {
