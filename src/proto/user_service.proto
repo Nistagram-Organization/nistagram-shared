@@ -4,8 +4,6 @@ package proto;
 
 option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
 
-import "user_message.proto";
-
 message BlockUserRequest {
   string email = 1;
 }
