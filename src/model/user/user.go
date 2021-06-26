@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	ID             uint          `json:"id"`
-	Username       string        `json:"username"`
+	Username       string        `json:"username" gorm:"unique"`
 	Name           string        `json:"name"`
 	Surname        string        `json:"surname"`
 	Phone          string        `json:"phone"`
@@ -18,12 +18,12 @@ type User struct {
 	Public         bool          `json:"public"`
 	Taggable       bool          `json:"taggable"`
 	Active         bool          `json:"active"`
-	Email          string        `json:"email"`
+	Email          string        `json:"email" gorm:"unique"`
 	Favorites      []post.Post
 	Posts          []post.Post
-	Muted          []User        `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
-	Blocked        []User        `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
-	Following      []User        `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
-	FollowedBy     []User        `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
-	FollowRequests []User        `gorm:"many2many:user_followRequests;joinForeignKey:UserID;JoinReferences:FollowRequestsUser"`
+	Muted          []User `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
+	Blocked        []User `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
+	Following      []User `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
+	FollowedBy     []User `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
+	FollowRequests []User `gorm:"many2many:user_followRequests;joinForeignKey:UserID;JoinReferences:FollowRequestsUser"`
 }
