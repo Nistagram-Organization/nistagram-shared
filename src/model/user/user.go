@@ -19,7 +19,7 @@ type User struct {
 	Taggable       bool          `json:"taggable"`
 	Active         bool          `json:"active"`
 	Email          string        `json:"email" gorm:"unique"`
-	Favorites      []post.Post
+	Favorites      []post.Post   `gorm:"many2many:favorites;joinForeignKey:UserID;JoinReferences:PostId"`
 	Posts          []post.Post
 	Muted          []User `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
 	Blocked        []User `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
