@@ -5,7 +5,7 @@ import (
 )
 
 type SingleCampaign struct {
-	ID   uint  `json:"id"`
-	Date int64 `json:"date"`
-	campaign.Campaign
+	ID                uint  `json:"id"`
+	Date              int64 `json:"date"`
+	campaign.Campaign `gorm:"embedded"`
 }

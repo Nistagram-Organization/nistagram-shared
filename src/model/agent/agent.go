@@ -6,6 +6,7 @@ import (
 )
 
 type Agent struct {
-	Campaigns []campaign.Campaign
+	ID        uint `json:"id"`
+	Campaigns []campaign.CampaignAgent
 	User      user.User `gorm:"embedded"`
 }
