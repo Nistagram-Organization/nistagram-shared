@@ -7,5 +7,5 @@ import (
 
 type Agent struct {
 	Campaigns []campaign.Campaign
-	user.User
+	User      user.User `gorm:"embedded"`
 }
