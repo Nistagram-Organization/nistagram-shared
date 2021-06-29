@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/Nistagram-Organization/nistagram-shared/src/model/gender"
+	"github.com/Nistagram-Organization/nistagram-shared/src/model/post"
 )
 
 type User struct {
@@ -18,8 +19,8 @@ type User struct {
 	Taggable       bool          `json:"taggable"`
 	Active         bool          `json:"active"`
 	Email          string        `json:"email" gorm:"unique"`
-	Favorites      []uint
-	Posts          []uint
+	Favorites      []post.PostUser
+	Posts          []post.PostUser
 	Muted          []User `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
 	Blocked        []User `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
 	Following      []User `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
