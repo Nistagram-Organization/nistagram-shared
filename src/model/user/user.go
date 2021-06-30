@@ -3,7 +3,6 @@ package user
 import (
 	"github.com/Nistagram-Organization/nistagram-shared/src/model/gender"
 	"github.com/Nistagram-Organization/nistagram-shared/src/model/post"
-	"os/user"
 )
 
 type User struct {
@@ -12,8 +11,8 @@ type User struct {
 	OwnerID        uint
 	OwnerType      string
 	Username       string          `json:"username" gorm:"unique"`
-	FirstName      string          `json:"name"`
-	Surname        string          `json:"surname"`
+	FirstName      string          `json:"first_name"`
+	LastName       string          `json:"last_name"`
 	Phone          string          `json:"phone"`
 	BirthDate      int64           `json:"birth_date"`
 	Website        string          `json:"website"`
@@ -25,9 +24,9 @@ type User struct {
 	Email          string          `json:"email" gorm:"unique"`
 	Favorites      []post.PostUser `gorm:"many2many:favorites;joinForeignKey:UserID;JoinReferences:PostID"`
 	Posts          []post.PostUser `gorm:"foreignKey:UserID"`
-	Muted          []user.User     `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
-	Blocked        []user.User     `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
-	Following      []user.User     `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
-	FollowedBy     []user.User     `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
-	FollowRequests []user.User     `gorm:"many2many:user_followRequests;joinForeignKey:UserID;JoinReferences:FollowRequestsUser"`
+	Muted          []User          `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
+	Blocked        []User          `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
+	Following      []User          `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
+	FollowedBy     []User          `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
+	FollowRequests []User          `gorm:"many2many:user_followRequests;joinForeignKey:UserID;JoinReferences:FollowRequestsUser"`
 }
