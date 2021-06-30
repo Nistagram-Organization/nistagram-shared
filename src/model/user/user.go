@@ -44,11 +44,11 @@ func (u *User) Validate() rest_error.RestErr {
 	if strings.TrimSpace(u.Username) == "" || len(u.Username) < 4 {
 		return rest_error.NewBadRequestError("Username must be at least 4 characters long")
 	}
-	if strings.TrimSpace(u.Name) == "" {
-		return rest_error.NewBadRequestError("Name cannot be empty")
+	if strings.TrimSpace(u.FirstName) == "" {
+		return rest_error.NewBadRequestError("First name cannot be empty")
 	}
 	if strings.TrimSpace(u.LastName) == "" {
-		return rest_error.NewBadRequestError("Surname cannot be empty")
+		return rest_error.NewBadRequestError("Last name cannot be empty")
 	}
 	if match, _ := regexp.MatchString("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s./0-9]*$", u.Phone); !match {
 		return rest_error.NewBadRequestError("Phone does not meet required pattern")
