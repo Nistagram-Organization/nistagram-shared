@@ -18,7 +18,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	BlockUser(ctx context.Context, in *BlockUserRequest, opts ...grpc.CallOption) (*BlockUserResponse, error)
+	TerminateProfile(ctx context.Context, in *TerminateProfileRequest, opts ...grpc.CallOption) (*TerminateProfileResponse, error)
 }
 
 type authServiceClient struct {
@@ -29,9 +29,9 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) BlockUser(ctx context.Context, in *BlockUserRequest, opts ...grpc.CallOption) (*BlockUserResponse, error) {
-	out := new(BlockUserResponse)
-	err := c.cc.Invoke(ctx, "/proto.AuthService/BlockUser", in, out, opts...)
+func (c *authServiceClient) TerminateProfile(ctx context.Context, in *TerminateProfileRequest, opts ...grpc.CallOption) (*TerminateProfileResponse, error) {
+	out := new(TerminateProfileResponse)
+	err := c.cc.Invoke(ctx, "/proto.AuthService/TerminateProfile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (c *authServiceClient) BlockUser(ctx context.Context, in *BlockUserRequest,
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
-	BlockUser(context.Context, *BlockUserRequest) (*BlockUserResponse, error)
+	TerminateProfile(context.Context, *TerminateProfileRequest) (*TerminateProfileResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
 }
 
@@ -50,8 +50,8 @@ type AuthServiceServer interface {
 type UnimplementedAuthServiceServer struct {
 }
 
-func (UnimplementedAuthServiceServer) BlockUser(context.Context, *BlockUserRequest) (*BlockUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BlockUser not implemented")
+func (UnimplementedAuthServiceServer) TerminateProfile(context.Context, *TerminateProfileRequest) (*TerminateProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TerminateProfile not implemented")
 }
 func (UnimplementedAuthServiceServer) mustEmbedUnimplementedAuthServiceServer() {}
 
@@ -66,20 +66,20 @@ func RegisterAuthServiceServer(s grpc.ServiceRegistrar, srv AuthServiceServer) {
 	s.RegisterService(&AuthService_ServiceDesc, srv)
 }
 
-func _AuthService_BlockUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BlockUserRequest)
+func _AuthService_TerminateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TerminateProfileRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AuthServiceServer).BlockUser(ctx, in)
+		return srv.(AuthServiceServer).TerminateProfile(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.AuthService/BlockUser",
+		FullMethod: "/proto.AuthService/TerminateProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).BlockUser(ctx, req.(*BlockUserRequest))
+		return srv.(AuthServiceServer).TerminateProfile(ctx, req.(*TerminateProfileRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -92,8 +92,8 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*AuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "BlockUser",
-			Handler:    _AuthService_BlockUser_Handler,
+			MethodName: "TerminateProfile",
+			Handler:    _AuthService_TerminateProfile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -4,15 +4,15 @@ package proto;
 
 option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
 
-message BlockUserRequest {
+message TerminateProfileRequest {
   string email = 1;
 }
 
-message BlockUserResponse {
+message TerminateProfileResponse {
   bool success = 1;
 }
 
 service AuthService {
-  rpc BlockUser(BlockUserRequest) returns (BlockUserResponse);
+  rpc TerminateProfile(TerminateProfileRequest) returns (TerminateProfileResponse);
 }
 
