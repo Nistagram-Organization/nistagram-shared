@@ -29,7 +29,6 @@ type User struct {
 	Active         bool            `json:"active"`
 	Email          string          `json:"email" gorm:"unique"`
 	Favorites      []post.PostUser `gorm:"many2many:favorites;joinForeignKey:UserID;JoinReferences:PostUserID"`
-	Posts          []post.PostUser `gorm:"foreignKey:UserID"`
 	Muted          []User          `gorm:"many2many:user_muted;joinForeignKey:UserID;JoinReferences:MutedUser"`
 	Blocked        []User          `gorm:"many2many:user_blocked;joinForeignKey:UserID;JoinReferences:BlockedUser"`
 	Following      []User          `gorm:"many2many:user_following;joinForeignKey:UserID;JoinReferences:FollowedUser"`
