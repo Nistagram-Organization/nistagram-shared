@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
+
+import "media_message.proto";
+
+message SaveMediaRequest {
+  MediaMessage image = 1;
+}
+
+message SaveMediaResponse {
+  uint64 id = 1;
+}
+
+message GetMediaRequest {
+  uint64 id = 1;
+}
+
+message GetMediaResponse {
+  MediaMessage image = 1;
+}
+
+service MediaService {
+  rpc SaveMedia(SaveMediaRequest) returns (SaveMediaResponse);
+  rpc GetMedia(GetMediaRequest) returns (GetMediaResponse);
+}

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
+
+message MediaMessage {
+  string imageBase64 = 1;
+}

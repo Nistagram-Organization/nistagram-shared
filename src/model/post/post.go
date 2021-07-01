@@ -5,6 +5,6 @@ type Post struct {
 	Description           string `json:"description"`
 	Date                  int64  `json:"date"`
 	MarkedAsInappropriate bool   `json:"marked_as_inappropriate"`
-	UserID                uint
+	UserEmail             string
 	MediaID               uint
 }
