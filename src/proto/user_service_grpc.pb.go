@@ -22,6 +22,7 @@ type UserServiceClient interface {
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
 	GetUserEmail(ctx context.Context, in *GetUserEmailRequest, opts ...grpc.CallOption) (*GetUserEmailResponse, error)
 	GetUsername(ctx context.Context, in *GetUsernameRequest, opts ...grpc.CallOption) (*GetUsernameResponse, error)
+	CheckIfPostIsInFavorites(ctx context.Context, in *CheckFavoritesRequest, opts ...grpc.CallOption) (*CheckFavoritesResponse, error)
 }
 
 type userServiceClient struct {
@@ -68,6 +69,15 @@ func (c *userServiceClient) GetUsername(ctx context.Context, in *GetUsernameRequ
 	return out, nil
 }
 
+func (c *userServiceClient) CheckIfPostIsInFavorites(ctx context.Context, in *CheckFavoritesRequest, opts ...grpc.CallOption) (*CheckFavoritesResponse, error) {
+	out := new(CheckFavoritesResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/CheckIfPostIsInFavorites", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -76,6 +86,7 @@ type UserServiceServer interface {
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
 	GetUserEmail(context.Context, *GetUserEmailRequest) (*GetUserEmailResponse, error)
 	GetUsername(context.Context, *GetUsernameRequest) (*GetUsernameResponse, error)
+	CheckIfPostIsInFavorites(context.Context, *CheckFavoritesRequest) (*CheckFavoritesResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -94,6 +105,9 @@ func (UnimplementedUserServiceServer) GetUserEmail(context.Context, *GetUserEmai
 }
 func (UnimplementedUserServiceServer) GetUsername(context.Context, *GetUsernameRequest) (*GetUsernameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsername not implemented")
+}
+func (UnimplementedUserServiceServer) CheckIfPostIsInFavorites(context.Context, *CheckFavoritesRequest) (*CheckFavoritesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckIfPostIsInFavorites not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -180,6 +194,24 @@ func _UserService_GetUsername_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_CheckIfPostIsInFavorites_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckFavoritesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).CheckIfPostIsInFavorites(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.UserService/CheckIfPostIsInFavorites",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CheckIfPostIsInFavorites(ctx, req.(*CheckFavoritesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,6 +234,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUsername",
 			Handler:    _UserService_GetUsername_Handler,
+		},
+		{
+			MethodName: "CheckIfPostIsInFavorites",
+			Handler:    _UserService_CheckIfPostIsInFavorites_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

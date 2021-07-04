@@ -39,9 +39,19 @@ message GetUsernameResponse {
   string username = 1;
 }
 
+message CheckFavoritesRequest {
+  string email = 1;
+  string postID = 2;
+}
+
+message CheckFavoritesResponse {
+  bool inFavorites = 1;
+}
+
 service UserService {
   rpc CreateUser(RegistrationRequest) returns (RegistrationResponse);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
   rpc GetUserEmail(GetUserEmailRequest) returns (GetUserEmailResponse);
   rpc GetUsername(GetUsernameRequest) returns (GetUsernameResponse);
+  rpc CheckIfPostIsInFavorites(CheckFavoritesRequest) returns (CheckFavoritesResponse);
 }
