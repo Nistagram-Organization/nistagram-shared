@@ -31,8 +31,17 @@ message GetUserEmailResponse {
   string email = 1;
 }
 
+message GetUsernameRequest {
+  string email = 1;
+}
+
+message GetUsernameResponse {
+  string username = 1;
+}
+
 service UserService {
   rpc CreateUser(RegistrationRequest) returns (RegistrationResponse);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
   rpc GetUserEmail(GetUserEmailRequest) returns (GetUserEmailResponse);
+  rpc GetUsername(GetUsernameRequest) returns (GetUsernameResponse);
 }

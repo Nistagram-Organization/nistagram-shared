@@ -21,6 +21,7 @@ type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *RegistrationRequest, opts ...grpc.CallOption) (*RegistrationResponse, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
 	GetUserEmail(ctx context.Context, in *GetUserEmailRequest, opts ...grpc.CallOption) (*GetUserEmailResponse, error)
+	GetUsername(ctx context.Context, in *GetUsernameRequest, opts ...grpc.CallOption) (*GetUsernameResponse, error)
 }
 
 type userServiceClient struct {
@@ -58,6 +59,15 @@ func (c *userServiceClient) GetUserEmail(ctx context.Context, in *GetUserEmailRe
 	return out, nil
 }
 
+func (c *userServiceClient) GetUsername(ctx context.Context, in *GetUsernameRequest, opts ...grpc.CallOption) (*GetUsernameResponse, error) {
+	out := new(GetUsernameResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/GetUsername", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type UserServiceServer interface {
 	CreateUser(context.Context, *RegistrationRequest) (*RegistrationResponse, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
 	GetUserEmail(context.Context, *GetUserEmailRequest) (*GetUserEmailResponse, error)
+	GetUsername(context.Context, *GetUsernameRequest) (*GetUsernameResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -80,6 +91,9 @@ func (UnimplementedUserServiceServer) DeleteUser(context.Context, *DeleteUserReq
 }
 func (UnimplementedUserServiceServer) GetUserEmail(context.Context, *GetUserEmailRequest) (*GetUserEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserEmail not implemented")
+}
+func (UnimplementedUserServiceServer) GetUsername(context.Context, *GetUsernameRequest) (*GetUsernameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsername not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -148,6 +162,24 @@ func _UserService_GetUserEmail_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_GetUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsernameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).GetUsername(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.UserService/GetUsername",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).GetUsername(ctx, req.(*GetUsernameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +198,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserEmail",
 			Handler:    _UserService_GetUserEmail_Handler,
+		},
+		{
+			MethodName: "GetUsername",
+			Handler:    _UserService_GetUsername_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
