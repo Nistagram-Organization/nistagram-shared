@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/Nistagram-Organization/nistagram-shared/src/proto";
+
+message DecideOnPostRequest {
+  uint64 post = 1;
+  bool delete = 2;
+}
+
+message DecideOnPostResponse {
+  bool success = 1;
+}
+
+service PostService {
+  rpc DecideOnPost(DecideOnPostRequest) returns (DecideOnPostResponse);
+}
