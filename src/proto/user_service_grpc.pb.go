@@ -23,6 +23,7 @@ type UserServiceClient interface {
 	GetUserEmail(ctx context.Context, in *GetUserEmailRequest, opts ...grpc.CallOption) (*GetUserEmailResponse, error)
 	GetUsername(ctx context.Context, in *GetUsernameRequest, opts ...grpc.CallOption) (*GetUsernameResponse, error)
 	CheckIfPostIsInFavorites(ctx context.Context, in *CheckFavoritesRequest, opts ...grpc.CallOption) (*CheckFavoritesResponse, error)
+	CheckIfUserIsTaggable(ctx context.Context, in *CheckTaggableRequest, opts ...grpc.CallOption) (*CheckTaggableResponse, error)
 }
 
 type userServiceClient struct {
@@ -78,6 +79,15 @@ func (c *userServiceClient) CheckIfPostIsInFavorites(ctx context.Context, in *Ch
 	return out, nil
 }
 
+func (c *userServiceClient) CheckIfUserIsTaggable(ctx context.Context, in *CheckTaggableRequest, opts ...grpc.CallOption) (*CheckTaggableResponse, error) {
+	out := new(CheckTaggableResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/CheckIfUserIsTaggable", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -87,6 +97,7 @@ type UserServiceServer interface {
 	GetUserEmail(context.Context, *GetUserEmailRequest) (*GetUserEmailResponse, error)
 	GetUsername(context.Context, *GetUsernameRequest) (*GetUsernameResponse, error)
 	CheckIfPostIsInFavorites(context.Context, *CheckFavoritesRequest) (*CheckFavoritesResponse, error)
+	CheckIfUserIsTaggable(context.Context, *CheckTaggableRequest) (*CheckTaggableResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -108,6 +119,9 @@ func (UnimplementedUserServiceServer) GetUsername(context.Context, *GetUsernameR
 }
 func (UnimplementedUserServiceServer) CheckIfPostIsInFavorites(context.Context, *CheckFavoritesRequest) (*CheckFavoritesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckIfPostIsInFavorites not implemented")
+}
+func (UnimplementedUserServiceServer) CheckIfUserIsTaggable(context.Context, *CheckTaggableRequest) (*CheckTaggableResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckIfUserIsTaggable not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -212,6 +226,24 @@ func _UserService_CheckIfPostIsInFavorites_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_CheckIfUserIsTaggable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckTaggableRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).CheckIfUserIsTaggable(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.UserService/CheckIfUserIsTaggable",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).CheckIfUserIsTaggable(ctx, req.(*CheckTaggableRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +270,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckIfPostIsInFavorites",
 			Handler:    _UserService_CheckIfPostIsInFavorites_Handler,
+		},
+		{
+			MethodName: "CheckIfUserIsTaggable",
+			Handler:    _UserService_CheckIfUserIsTaggable_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
