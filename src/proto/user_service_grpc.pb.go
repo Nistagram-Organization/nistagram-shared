@@ -24,7 +24,7 @@ type UserServiceClient interface {
 	GetUsername(ctx context.Context, in *GetUsernameRequest, opts ...grpc.CallOption) (*GetUsernameResponse, error)
 	CheckIfPostIsInFavorites(ctx context.Context, in *CheckFavoritesRequest, opts ...grpc.CallOption) (*CheckFavoritesResponse, error)
 	CheckIfUserIsTaggable(ctx context.Context, in *CheckTaggableRequest, opts ...grpc.CallOption) (*CheckTaggableResponse, error)
-	CheckIfUserIsFollowing(ctx context.Context, in *CheckFollowerRequest, opts ...grpc.CallOption) (*CheckFollowerResponse, error)
+	GetFollowingUsers(ctx context.Context, in *GetFollowingUsersRequest, opts ...grpc.CallOption) (UserService_GetFollowingUsersClient, error)
 }
 
 type userServiceClient struct {
@@ -89,13 +89,36 @@ func (c *userServiceClient) CheckIfUserIsTaggable(ctx context.Context, in *Check
 	return out, nil
 }
 
-func (c *userServiceClient) CheckIfUserIsFollowing(ctx context.Context, in *CheckFollowerRequest, opts ...grpc.CallOption) (*CheckFollowerResponse, error) {
-	out := new(CheckFollowerResponse)
-	err := c.cc.Invoke(ctx, "/proto.UserService/CheckIfUserIsFollowing", in, out, opts...)
+func (c *userServiceClient) GetFollowingUsers(ctx context.Context, in *GetFollowingUsersRequest, opts ...grpc.CallOption) (UserService_GetFollowingUsersClient, error) {
+	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[0], "/proto.UserService/GetFollowingUsers", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &userServiceGetFollowingUsersClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type UserService_GetFollowingUsersClient interface {
+	Recv() (*GetFollowingUsersResponse, error)
+	grpc.ClientStream
+}
+
+type userServiceGetFollowingUsersClient struct {
+	grpc.ClientStream
+}
+
+func (x *userServiceGetFollowingUsersClient) Recv() (*GetFollowingUsersResponse, error) {
+	m := new(GetFollowingUsersResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // UserServiceServer is the server API for UserService service.
@@ -108,7 +131,7 @@ type UserServiceServer interface {
 	GetUsername(context.Context, *GetUsernameRequest) (*GetUsernameResponse, error)
 	CheckIfPostIsInFavorites(context.Context, *CheckFavoritesRequest) (*CheckFavoritesResponse, error)
 	CheckIfUserIsTaggable(context.Context, *CheckTaggableRequest) (*CheckTaggableResponse, error)
-	CheckIfUserIsFollowing(context.Context, *CheckFollowerRequest) (*CheckFollowerResponse, error)
+	GetFollowingUsers(*GetFollowingUsersRequest, UserService_GetFollowingUsersServer) error
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -134,8 +157,8 @@ func (UnimplementedUserServiceServer) CheckIfPostIsInFavorites(context.Context, 
 func (UnimplementedUserServiceServer) CheckIfUserIsTaggable(context.Context, *CheckTaggableRequest) (*CheckTaggableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckIfUserIsTaggable not implemented")
 }
-func (UnimplementedUserServiceServer) CheckIfUserIsFollowing(context.Context, *CheckFollowerRequest) (*CheckFollowerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckIfUserIsFollowing not implemented")
+func (UnimplementedUserServiceServer) GetFollowingUsers(*GetFollowingUsersRequest, UserService_GetFollowingUsersServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetFollowingUsers not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -258,22 +281,25 @@ func _UserService_CheckIfUserIsTaggable_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_CheckIfUserIsFollowing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckFollowerRequest)
-	if err := dec(in); err != nil {
-		return nil, err
+func _UserService_GetFollowingUsers_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetFollowingUsersRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).CheckIfUserIsFollowing(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/proto.UserService/CheckIfUserIsFollowing",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CheckIfUserIsFollowing(ctx, req.(*CheckFollowerRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return srv.(UserServiceServer).GetFollowingUsers(m, &userServiceGetFollowingUsersServer{stream})
+}
+
+type UserService_GetFollowingUsersServer interface {
+	Send(*GetFollowingUsersResponse) error
+	grpc.ServerStream
+}
+
+type userServiceGetFollowingUsersServer struct {
+	grpc.ServerStream
+}
+
+func (x *userServiceGetFollowingUsersServer) Send(m *GetFollowingUsersResponse) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
@@ -307,11 +333,13 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "CheckIfUserIsTaggable",
 			Handler:    _UserService_CheckIfUserIsTaggable_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "CheckIfUserIsFollowing",
-			Handler:    _UserService_CheckIfUserIsFollowing_Handler,
+			StreamName:    "GetFollowingUsers",
+			Handler:       _UserService_GetFollowingUsers_Handler,
+			ServerStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "user_service.proto",
 }

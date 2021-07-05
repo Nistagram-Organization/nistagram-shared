@@ -56,13 +56,12 @@ message CheckTaggableResponse {
   bool taggable = 1;
 }
 
-message CheckFollowerRequest {
+message GetFollowingUsersRequest {
   string userEmail = 1;
-  string userToFollowEmail = 2;
 }
 
-message CheckFollowerResponse {
-  bool following = 1;
+message GetFollowingUsersResponse {
+  string user = 1;
 }
 
 service UserService {
@@ -72,5 +71,5 @@ service UserService {
   rpc GetUsername(GetUsernameRequest) returns (GetUsernameResponse);
   rpc CheckIfPostIsInFavorites(CheckFavoritesRequest) returns (CheckFavoritesResponse);
   rpc CheckIfUserIsTaggable(CheckTaggableRequest) returns (CheckTaggableResponse);
-  rpc CheckIfUserIsFollowing(CheckFollowerRequest) returns (CheckFollowerResponse);
+  rpc GetFollowingUsers(GetFollowingUsersRequest) returns (stream GetFollowingUsersResponse);
 }
