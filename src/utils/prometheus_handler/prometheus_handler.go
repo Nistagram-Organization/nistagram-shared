@@ -17,17 +17,16 @@ func GetHttpRequestsCounter() *prometheus.CounterVec {
 	)
 }
 
-func GetHttpRequestsSize() *prometheus.CounterVec {
-	return prometheus.NewCounterVec(
+func GetHttpRequestsSize() prometheus.Counter {
+	return prometheus.NewCounter(
 		prometheus.CounterOpts{
 			Name: "http_requests_size",
 			Help: "Total traffic in megabytes",
 		},
-		[]string{},
 	)
 }
 
-func PrometheusMiddleware(requestsCounter *prometheus.CounterVec, requestsSize *prometheus.CounterVec) gin.HandlerFunc {
+func PrometheusMiddleware(requestsCounter *prometheus.CounterVec, requestsSize prometheus.Counter) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		requestSize := int(c.Request.ContentLength)
 
@@ -35,7 +34,7 @@ func PrometheusMiddleware(requestsCounter *prometheus.CounterVec, requestsSize *
 
 		responseSize := c.Writer.Size()
 		requestsCounter.WithLabelValues(c.Request.Method, c.Request.RequestURI, strconv.Itoa(c.Writer.Status()))
-		requestsSize.WithLabelValues(strconv.Itoa((requestSize + responseSize) / 1024 / 1024)).Inc()
+		requestsSize.Add(float64((requestSize + responseSize) / 1024 / 1024))
 	}
 }
 
