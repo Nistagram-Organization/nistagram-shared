@@ -47,7 +47,7 @@ func PrometheusMiddleware(requestsCounter *prometheus.CounterVec, requestsSize p
 
 		responseSize := c.Writer.Size()
 		requestsCounter.WithLabelValues(c.Request.Method, c.Request.RequestURI, strconv.Itoa(c.Writer.Status())).Inc()
-		requestsSize.Add(float64((requestSize + responseSize) / 1024 / 1024))
+		requestsSize.Add(float64((requestSize + responseSize) / 1024 / 1024 / 1024))
 		uniqueClients.WithLabelValues(ip, time.Now().Format(time.UnixDate), browser).Inc()
 	}
 }
