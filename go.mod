@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/auth0/go-jwt-middleware v1.0.1
-	github.com/form3tech-oss/jwt-go v3.2.2+incompatible
+	github.com/form3tech-oss/jwt-go v3.2.3+incompatible
 	github.com/gin-gonic/gin v1.7.2
 	github.com/prometheus/client_golang v1.11.0
 	google.golang.org/grpc v1.38.0
