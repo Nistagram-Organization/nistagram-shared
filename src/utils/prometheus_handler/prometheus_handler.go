@@ -41,7 +41,7 @@ func PrometheusMiddleware(requestsCounter *prometheus.CounterVec, requestsSize p
 	return func(c *gin.Context) {
 		requestSize := int(c.Request.ContentLength)
 		browser := c.Request.UserAgent()
-		ip := c.GetHeader("X-Forwarded-For")
+		ip := c.ClientIP()
 
 		c.Next()
 
