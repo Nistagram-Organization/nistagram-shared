@@ -81,5 +81,5 @@ service UserService {
   rpc CheckIfPostIsInFavorites(CheckFavoritesRequest) returns (CheckFavoritesResponse);
   rpc CheckIfUserIsTaggable(CheckTaggableRequest) returns (CheckTaggableResponse);
   rpc GetFollowingUsers(GetFollowingUsersRequest) returns (stream GetFollowingUsersResponse);
-  rpc CheckIfUserIsBlocked(CheckIfUserIsBlockedRequest) returns (stream CheckIfUserIsBlockedResponse);
+  rpc CheckIfUserIsBlocked(CheckIfUserIsBlockedRequest) returns (CheckIfUserIsBlockedResponse);
 }
