@@ -25,6 +25,7 @@ type UserServiceClient interface {
 	CheckIfPostIsInFavorites(ctx context.Context, in *CheckFavoritesRequest, opts ...grpc.CallOption) (*CheckFavoritesResponse, error)
 	CheckIfUserIsTaggable(ctx context.Context, in *CheckTaggableRequest, opts ...grpc.CallOption) (*CheckTaggableResponse, error)
 	GetFollowingUsers(ctx context.Context, in *GetFollowingUsersRequest, opts ...grpc.CallOption) (UserService_GetFollowingUsersClient, error)
+	CheckIfUserIsBlocked(ctx context.Context, in *CheckIfUserIsBlockedRequest, opts ...grpc.CallOption) (UserService_CheckIfUserIsBlockedClient, error)
 }
 
 type userServiceClient struct {
@@ -121,6 +122,38 @@ func (x *userServiceGetFollowingUsersClient) Recv() (*GetFollowingUsersResponse,
 	return m, nil
 }
 
+func (c *userServiceClient) CheckIfUserIsBlocked(ctx context.Context, in *CheckIfUserIsBlockedRequest, opts ...grpc.CallOption) (UserService_CheckIfUserIsBlockedClient, error) {
+	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[1], "/proto.UserService/CheckIfUserIsBlocked", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &userServiceCheckIfUserIsBlockedClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type UserService_CheckIfUserIsBlockedClient interface {
+	Recv() (*CheckIfUserIsBlockedResponse, error)
+	grpc.ClientStream
+}
+
+type userServiceCheckIfUserIsBlockedClient struct {
+	grpc.ClientStream
+}
+
+func (x *userServiceCheckIfUserIsBlockedClient) Recv() (*CheckIfUserIsBlockedResponse, error) {
+	m := new(CheckIfUserIsBlockedResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -132,6 +165,7 @@ type UserServiceServer interface {
 	CheckIfPostIsInFavorites(context.Context, *CheckFavoritesRequest) (*CheckFavoritesResponse, error)
 	CheckIfUserIsTaggable(context.Context, *CheckTaggableRequest) (*CheckTaggableResponse, error)
 	GetFollowingUsers(*GetFollowingUsersRequest, UserService_GetFollowingUsersServer) error
+	CheckIfUserIsBlocked(*CheckIfUserIsBlockedRequest, UserService_CheckIfUserIsBlockedServer) error
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -159,6 +193,9 @@ func (UnimplementedUserServiceServer) CheckIfUserIsTaggable(context.Context, *Ch
 }
 func (UnimplementedUserServiceServer) GetFollowingUsers(*GetFollowingUsersRequest, UserService_GetFollowingUsersServer) error {
 	return status.Errorf(codes.Unimplemented, "method GetFollowingUsers not implemented")
+}
+func (UnimplementedUserServiceServer) CheckIfUserIsBlocked(*CheckIfUserIsBlockedRequest, UserService_CheckIfUserIsBlockedServer) error {
+	return status.Errorf(codes.Unimplemented, "method CheckIfUserIsBlocked not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -302,6 +339,27 @@ func (x *userServiceGetFollowingUsersServer) Send(m *GetFollowingUsersResponse) 
 	return x.ServerStream.SendMsg(m)
 }
 
+func _UserService_CheckIfUserIsBlocked_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(CheckIfUserIsBlockedRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(UserServiceServer).CheckIfUserIsBlocked(m, &userServiceCheckIfUserIsBlockedServer{stream})
+}
+
+type UserService_CheckIfUserIsBlockedServer interface {
+	Send(*CheckIfUserIsBlockedResponse) error
+	grpc.ServerStream
+}
+
+type userServiceCheckIfUserIsBlockedServer struct {
+	grpc.ServerStream
+}
+
+func (x *userServiceCheckIfUserIsBlockedServer) Send(m *CheckIfUserIsBlockedResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -338,6 +396,11 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "GetFollowingUsers",
 			Handler:       _UserService_GetFollowingUsers_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "CheckIfUserIsBlocked",
+			Handler:       _UserService_CheckIfUserIsBlocked_Handler,
 			ServerStreams: true,
 		},
 	},

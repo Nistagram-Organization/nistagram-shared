@@ -64,6 +64,15 @@ message GetFollowingUsersResponse {
   string user = 1;
 }
 
+message CheckIfUserIsBlockedRequest {
+  string user = 1;
+  string blockedUser = 2;
+}
+
+message CheckIfUserIsBlockedResponse {
+  bool blocked = 1;
+}
+
 service UserService {
   rpc CreateUser(RegistrationRequest) returns (RegistrationResponse);
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
@@ -72,4 +81,5 @@ service UserService {
   rpc CheckIfPostIsInFavorites(CheckFavoritesRequest) returns (CheckFavoritesResponse);
   rpc CheckIfUserIsTaggable(CheckTaggableRequest) returns (CheckTaggableResponse);
   rpc GetFollowingUsers(GetFollowingUsersRequest) returns (stream GetFollowingUsersResponse);
+  rpc CheckIfUserIsBlocked(CheckIfUserIsBlockedRequest) returns (stream CheckIfUserIsBlockedResponse);
 }
